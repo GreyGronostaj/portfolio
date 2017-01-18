@@ -1,16 +1,17 @@
+import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PortfolioSolution implements Solution<Integer> {
+public class PortfolioSolution implements DoubleSolution {
 
     private double[] objectives;
-    private int[] variables;
+    private double[] variables;
     private Map<Object, Object> attributes;
 
     public PortfolioSolution(int numberOfVariables, int numberOfObjectives) {
-        variables = new int[numberOfVariables];
+        variables = new double[numberOfVariables];
         objectives = new double[numberOfObjectives];
         attributes = new HashMap<>();
     }
@@ -26,12 +27,12 @@ public class PortfolioSolution implements Solution<Integer> {
     }
 
     @Override
-    public Integer getVariableValue(int index) {
+    public Double getVariableValue(int index) {
         return variables[index];
     }
 
     @Override
-    public void setVariableValue(int index, Integer value) {
+    public void setVariableValue(int index, Double value) {
         variables[index] = value;
     }
 
@@ -52,7 +53,19 @@ public class PortfolioSolution implements Solution<Integer> {
 
     @Override
     public Solution copy() {
-        return null;
+        int numberOfVariables = getNumberOfVariables();
+        int numberOfObjectives = getNumberOfObjectives();
+        PortfolioSolution portfolioSolution = new PortfolioSolution(numberOfVariables, numberOfObjectives);
+        for (int i = 0; i < numberOfVariables; i++) {
+            portfolioSolution.setVariableValue(i, getVariableValue(i));
+        }
+        for (int i = 0; i < numberOfObjectives; i++) {
+            portfolioSolution.setObjective(i, getObjective(i));
+        }
+        for (Object attributeKey : attributes.keySet()) {
+            portfolioSolution.setAttribute(attributeKey, getAttribute(attributeKey));
+        }
+        return portfolioSolution;
     }
 
     @Override
@@ -65,4 +78,23 @@ public class PortfolioSolution implements Solution<Integer> {
         return attributes.get(id) ;
     }
 
+    @Override
+    public Double getLowerBound(int index) {
+        return 0.0;
+    }
+
+    @Override
+    public Double getUpperBound(int index) {
+        return 1.0;
+    }
+
+    public void repair() {
+        double sum = 0;
+        for(int i = 0; i < getNumberOfVariables(); i++) {
+            sum += getVariableValue(i);
+        }
+        for(int i = 0; i < getNumberOfVariables(); i++) {
+            setVariableValue(i, getVariableValue(i) / sum);
+        }
+    }
 }
