@@ -1,43 +1,45 @@
+import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.impl.AbstractGenericProblem;
+import org.uma.jmetal.solution.DoubleSolution;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
-public class PortfolioProblem extends AbstractGenericProblem<PortfolioSolution> {
+public class PortfolioProblem extends AbstractGenericProblem<DoubleSolution> implements DoubleProblem {
 
     Random random = new Random();
 
-    double[] expectedReturn;
+    double[] expectedReturns;
     double[][] covariance;
-    double[] weight;
 
-    public PortfolioProblem(double[] expectedReturn, double[] weight, double[][] covariance) {
-        setNumberOfVariables(3); // ilość assetów?
+    public PortfolioProblem(double[] expectedReturns, double[][] covariance) {
+        setNumberOfVariables(expectedReturns.length); // 3 // ilość assetów?
         setNumberOfObjectives(2);
         setNumberOfConstraints(2);
         setName("Portfolio");
 
-        this.expectedReturn = expectedReturn;
+        this.expectedReturns = expectedReturns;
         this.covariance = covariance;
-        this.weight = weight;
     }
 
-    @Override
-    public void evaluate(PortfolioSolution solution) {
+//    @Override
+//    public void evaluate(PortfolioSolution solution) {
+//        evaluate((DoubleSolution)solution);
+//    }
 
+    @Override
+    public void evaluate(DoubleSolution solution) {
         double expectedReturn = 0;
         for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-            Integer iValue = solution.getVariableValue(i);
-            expectedReturn += weight[iValue] * this.expectedReturn[iValue];
+//            Integer iValue = solution.getVariableValue(i);
+            expectedReturn += solution.getVariableValue(i) * expectedReturns[i];
         }
 
         double risk = 0;
         for (int i = 0; i < solution.getNumberOfVariables(); i++) {
             for (int j = 0; j < solution.getNumberOfVariables(); j++) {
-                Integer iValue = solution.getVariableValue(i);
-                Integer jValue = solution.getVariableValue(j);
-                risk += weight[iValue] * weight[jValue] * covariance[iValue][jValue];
+//                Integer iValue = solution.getVariableValue(i);
+//                Integer jValue = solution.getVariableValue(j);
+                risk += solution.getVariableValue(i) * solution.getVariableValue(j) * covariance[i][j];
             }
         }
 
@@ -47,21 +49,50 @@ public class PortfolioProblem extends AbstractGenericProblem<PortfolioSolution> 
 
     @Override
     public PortfolioSolution createSolution() {
-        ArrayList<Integer> list = new ArrayList<>();
-        for (int i = 0; i < expectedReturn.length; i++) {
-            list.add(i);
+        int numberOfVariables = getNumberOfVariables();
+
+        double[] values = new double[numberOfVariables];
+
+        double sum = 0;
+        for(int i = 0; i < numberOfVariables; i++) {
+            double randomDouble = random.nextDouble();
+            values[i] = randomDouble;
+            sum += randomDouble;
         }
 
-        Collections.shuffle(list);
+        PortfolioSolution portfolioSolution = new PortfolioSolution(numberOfVariables, getNumberOfObjectives());
 
-        int numberOfElements = random.nextInt(expectedReturn.length);
-
-        PortfolioSolution solution = new PortfolioSolution(numberOfElements, getNumberOfObjectives());
-
-        for (int i = 0; i < numberOfElements; i++) {
-            solution.setVariableValue(i, list.get(i));
+        for(int i = 0; i < numberOfVariables; i++) {
+            portfolioSolution.setVariableValue(i, values[i] / sum);
         }
 
-        return solution;
+        return portfolioSolution;
+
+//        ArrayList<Integer> list = new ArrayList<>();
+//        for (int i = 0; i < expectedReturns.length; i++) {
+//            list.add(i);
+//        }
+//
+//        Collections.shuffle(list);
+//
+//        int numberOfElements = random.nextInt(expectedReturns.length);
+//
+//        PortfolioSolution solution = new PortfolioSolution(numberOfElements, getNumberOfObjectives());
+//
+//        for (int i = 0; i < numberOfElements; i++) {
+//            solution.setVariableValue(i, list.get(i));
+//        }
+//
+//        return solution;
+    }
+
+    @Override
+    public Double getLowerBound(int index) {
+        return null;
+    }
+
+    @Override
+    public Double getUpperBound(int index) {
+        return null;
     }
 }
