@@ -42,8 +42,8 @@ public class PortfolioProblem extends AbstractGenericProblem<DoubleSolution> imp
             }
         }
 
-        solution.setObjective(0, expectedReturn);
-        solution.setObjective(1, -1.0 * risk);
+        solution.setObjective(0, -expectedReturn);
+        solution.setObjective(1, risk);
     }
 
     @Override

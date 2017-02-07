@@ -6,7 +6,6 @@ import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.util.AlgorithmRunner;
-import org.uma.jmetal.util.JMetalLogger;
 
 import java.math.BigDecimal;
 import java.util.Comparator;
@@ -62,21 +61,15 @@ public class PortfolioRunner {
             System.out.println("Portfolio solution");
             for (int i = 0; i < portfolioSolution.getNumberOfVariables(); i++) {
                 BigDecimal variableValue = new BigDecimal(portfolioSolution.getVariableValue(i));
-                System.out.println("    " + variableValue.setScale(2, BigDecimal.ROUND_UP).doubleValue());
+                System.out.println("    " + variableValue.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue());
             }
             BigDecimal objective1 = new BigDecimal(portfolioSolution.getObjective(0));
-            System.out.println("    Potential return: " + objective1.setScale(2, BigDecimal.ROUND_UP).doubleValue() + ".");
+            System.out.println("    Potential return: " + objective1.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() * -1 + ".");
 
             BigDecimal objective2 = new BigDecimal(portfolioSolution.getObjective(1));
-            System.out.println("    Risk: " + objective2.setScale(2, BigDecimal.ROUND_UP).doubleValue() + ".");
+            System.out.println("    Risk: " + objective2.setScale(4, BigDecimal.ROUND_HALF_UP).doubleValue() + ".");
         }
 
-        JMetalLogger.logger.info("Total execution time: " + computingTime + "ms.");
-
-//        printFinalSolutionSet(population);
-//        if (!referenceParetoFront.equals("")) {
-//            printQualityIndicators(population, referenceParetoFront);
-//        }
+        System.out.println("Total execution time: " + computingTime + "ms.");
     }
-
 }
