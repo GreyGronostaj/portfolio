@@ -1,3 +1,5 @@
+package pl.edu.agh.student.portfolio;
+
 import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2;
 import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
@@ -24,9 +26,7 @@ public class PortfolioRunner {
 //        for (int i = 0; i < expectedReturn.length; i++) expectedReturn[i] = -expectedReturn[i];
 
         PortfolioProblem problem = new PortfolioProblem(expectedReturn, covariance);
-        SPEA2 algorithm;
-
-        BinaryTournamentSelection selection;
+        SPEA2<PortfolioSolution> algorithm;
 
         double crossoverProbability = 0.125;
         double crossoverDistributionIndex = 20.0;
@@ -36,9 +36,10 @@ public class PortfolioRunner {
         double mutationDistributionIndex = 20.0;
         PolynomialMutation mutation = new PortfolioPolynomialMutation(mutationProbability, mutationDistributionIndex); //(mutationProbability, mutationDistributionIndex);
 
-        selection = new BinaryTournamentSelection<>(new PortfolioComparator());
+        BinaryTournamentSelection selection = new BinaryTournamentSelection<>(new PortfolioComparator());
 
-        algorithm = new SPEA2Builder(problem, crossover, mutation)
+        //noinspection unchecked
+        algorithm = new SPEA2Builder<>(problem, crossover, mutation)
                 .setSelectionOperator(selection)
                 .setMaxIterations(50)
                 .setPopulationSize(50)
@@ -64,10 +65,10 @@ public class PortfolioRunner {
                 System.out.println("    " + variableValue.setScale(2, BigDecimal.ROUND_UP).doubleValue());
             }
             BigDecimal objective1 = new BigDecimal(portfolioSolution.getObjective(0));
-            System.out.println("    Potential return: " + Math.round(objective1.setScale(2, BigDecimal.ROUND_UP).doubleValue()) + ".");
+            System.out.println("    Potential return: " + objective1.setScale(2, BigDecimal.ROUND_UP).doubleValue() + ".");
 
             BigDecimal objective2 = new BigDecimal(portfolioSolution.getObjective(1));
-            System.out.println("    Risk: " + Math.round(objective2.setScale(2, BigDecimal.ROUND_UP).doubleValue()) + ".");
+            System.out.println("    Risk: " + objective2.setScale(2, BigDecimal.ROUND_UP).doubleValue() + ".");
         }
 
         JMetalLogger.logger.info("Total execution time: " + computingTime + "ms.");

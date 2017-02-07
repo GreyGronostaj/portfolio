@@ -1,3 +1,5 @@
+package pl.edu.agh.student.portfolio;
+
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.solution.Solution;
 
@@ -52,7 +54,7 @@ public class PortfolioSolution implements DoubleSolution {
     }
 
     @Override
-    public Solution copy() {
+    public Solution<Double> copy() {
         int numberOfVariables = getNumberOfVariables();
         int numberOfObjectives = getNumberOfObjectives();
         PortfolioSolution portfolioSolution = new PortfolioSolution(numberOfVariables, numberOfObjectives);

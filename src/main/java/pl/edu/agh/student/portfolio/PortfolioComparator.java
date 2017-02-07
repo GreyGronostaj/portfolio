@@ -1,8 +1,12 @@
+package pl.edu.agh.student.portfolio;
+
 import java.io.Serializable;
 import java.util.Comparator;
 
 public class PortfolioComparator implements Comparator<PortfolioSolution>, Serializable {
 
+    // -1 = o2 is better
+    //  1 = o1 is better
     @Override
     public int compare(PortfolioSolution o1, PortfolioSolution o2) {
         double o1ExpectedReturn = o1.getObjective(0);

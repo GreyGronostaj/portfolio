@@ -1,3 +1,5 @@
+package pl.edu.agh.student.portfolio;
+
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.impl.AbstractGenericProblem;
 import org.uma.jmetal.solution.DoubleSolution;
@@ -30,15 +32,12 @@ public class PortfolioProblem extends AbstractGenericProblem<DoubleSolution> imp
     public void evaluate(DoubleSolution solution) {
         double expectedReturn = 0;
         for (int i = 0; i < solution.getNumberOfVariables(); i++) {
-//            Integer iValue = solution.getVariableValue(i);
             expectedReturn += solution.getVariableValue(i) * expectedReturns[i];
         }
 
         double risk = 0;
         for (int i = 0; i < solution.getNumberOfVariables(); i++) {
             for (int j = 0; j < solution.getNumberOfVariables(); j++) {
-//                Integer iValue = solution.getVariableValue(i);
-//                Integer jValue = solution.getVariableValue(j);
                 risk += solution.getVariableValue(i) * solution.getVariableValue(j) * covariance[i][j];
             }
         }
@@ -77,7 +76,7 @@ public class PortfolioProblem extends AbstractGenericProblem<DoubleSolution> imp
 //
 //        int numberOfElements = random.nextInt(expectedReturns.length);
 //
-//        PortfolioSolution solution = new PortfolioSolution(numberOfElements, getNumberOfObjectives());
+//        pl.edu.agh.student.portfolio.PortfolioSolution solution = new pl.edu.agh.student.portfolio.PortfolioSolution(numberOfElements, getNumberOfObjectives());
 //
 //        for (int i = 0; i < numberOfElements; i++) {
 //            solution.setVariableValue(i, list.get(i));

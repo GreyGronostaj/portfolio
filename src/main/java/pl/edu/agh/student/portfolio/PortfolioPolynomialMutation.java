@@ -1,3 +1,5 @@
+package pl.edu.agh.student.portfolio;
+
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.solution.DoubleSolution;
 
