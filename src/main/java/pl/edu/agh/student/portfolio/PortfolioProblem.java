@@ -3,18 +3,18 @@ package pl.edu.agh.student.portfolio;
 import org.uma.jmetal.problem.DoubleProblem;
 import org.uma.jmetal.problem.impl.AbstractGenericProblem;
 import org.uma.jmetal.solution.DoubleSolution;
-
-import java.util.Random;
+import org.uma.jmetal.util.pseudorandom.JMetalRandom;
+import org.uma.jmetal.util.pseudorandom.PseudoRandomGenerator;
 
 public class PortfolioProblem extends AbstractGenericProblem<DoubleSolution> implements DoubleProblem {
 
-    Random random = new Random();
+    private PseudoRandomGenerator random = JMetalRandom.getInstance().getRanndomGenerator();
 
-    double[] expectedReturns;
-    double[][] covariance;
+    private double[] expectedReturns;
+    private double[][] covariance;
 
     public PortfolioProblem(double[] expectedReturns, double[][] covariance) {
-        setNumberOfVariables(expectedReturns.length); // 3 // ilość assetów?
+        setNumberOfVariables(expectedReturns.length);
         setNumberOfObjectives(2);
         setNumberOfConstraints(2);
         setName("Portfolio");

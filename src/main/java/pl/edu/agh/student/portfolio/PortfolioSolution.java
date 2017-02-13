@@ -99,4 +99,13 @@ public class PortfolioSolution implements DoubleSolution {
             setVariableValue(i, getVariableValue(i) / sum);
         }
     }
+
+    public double[] getObjectives() {
+        return objectives;
+    }
+
+    public double[] getVariables() {
+        return variables;
+    }
+
 }
